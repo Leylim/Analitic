@@ -1,0 +1,9 @@
+SELECT department_id, LISTAGG(emp.first_name || ' ' || emp.last_name,',') WITHIN GROUP (ORDER BY emp.first_name) AS employees FROM employees emp GROUP BY department_id;
+SELECT employees.*, SUM(SALARY) OVER (PARTITION BY job_id ORDER BY employee_id ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) NUM FROM employees;
+SELECT employees.*,LAG(PHONE_NUMBER,1) OVER (PARTITION BY department_id ORDER BY hire_date) NEXT_VALUE FROM employees;
+SELECT * FROM EMPLOYEES ORDER BY SALARY,HIRE_DATE;
+SELECT emp.*, NTILE(11) OVER (ORDER BY EMPLOYEE_ID) FROM employees emp;
+SELECT a.*,avg_sal,DECODE(SIGN(avg_sal-SALARY), 1, 1,0) FROM employees a,
+(SELECT department_id,AVG(salary)avg_sal FROM employees GROUP BY department_id)b
+WHERE 1=1 AND a.department_id=b.department_id ORDER BY a.department_id,salary;
+SELECT emp.*, FIRST_VALUE(hire_date) OVER (PARTITION BY department_id) FV FROM employees emp ORDER BY department_id;
